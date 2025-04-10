@@ -110,6 +110,12 @@ function action_handler(act)
 end
 ActionPacket.open_listener(action_handler)
 
+windower.register_event('status change', function(new, old)
+    if new == 2 then
+        windower.send_command('ami off')
+    end
+end)
+
 windower.register_event('addon command', function(command, ...)
 	local args = T{...}
 	
