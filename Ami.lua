@@ -131,6 +131,20 @@ windower.register_event('addon command', function(command, ...)
         log('Auto WS: '..tostring(aws))
 		updateWidget()
         
+    elseif T{"off"}:contains(command) then
+		aws = false
+		atp = false
+        log('Auto AbsorbTP: '..tostring(atp))
+        log('Auto WS: '..tostring(aws))
+		updateWidget()
+        
+    elseif T{"on"}:contains(command) then
+		aws = true
+		atp = true
+        log('Auto AbsorbTP: '..tostring(atp))
+        log('Auto WS: '..tostring(aws))
+		updateWidget()
+        
 	elseif command == 'save' then
 		settings:save()
 		log('Settings saved.')
