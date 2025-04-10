@@ -1,6 +1,6 @@
 _addon.name = 'Ami'
 _addon.author = 'Cliff'
-_addon.version = '1.0.0'
+_addon.version = '1.1.0'
 _addon.commands = {'ami'}
 
 require('logger')
@@ -104,7 +104,7 @@ function action_handler(act)
 			windower.send_command(windower.to_shift_jis("input /p ('◇')ゞ 報告! 吸 "..param.."!!!"))
 		elseif message_id == 114 then
 			-- log('missed')
-			windower.send_command(windower.to_shift_jis("input /p 沒吸到.... Miss...."))
+			windower.send_command(windower.to_shift_jis("input /p (ﾉд-｡) 沒吸.... Miss...."))
 		end
 	end
 end
