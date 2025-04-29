@@ -1,6 +1,6 @@
 _addon.name = 'Ami'
 _addon.author = 'Cliff'
-_addon.version = '1.1.0'
+_addon.version = '1.2.1'
 _addon.commands = {'ami'}
 
 require('logger')
@@ -75,8 +75,12 @@ windower.register_event('prerender', function(...)
 		if target then
 			if atp and isSubJob('DRK') and windower.ffxi.get_spell_recasts()[275] == 0 and not hasSilence() then
 				windower.send_command(windower.to_shift_jis('input /ma アブゾタック <bt>'))
+				lastCheck = os.clock() + 3
+				return
 			elseif aws and windower.ffxi.get_player().vitals.tp >= 1000 and target.distance < 15 then
 				windower.send_command(windower.to_shift_jis('input /ws '..settings.ws..' <bt>'))
+				lastCheck = os.clock() + 4
+				return
 			end
 		end
 		lastCheck = os.clock()
@@ -102,6 +106,8 @@ function action_handler(act)
 	if T{454,114}:contains(message_id) and action_id == 275 then
 		if message_id == 454 and param >= 200 then
 			windower.send_command(windower.to_shift_jis("input /p ('◇')ゞ 報告! 吸 "..param.."!!!"))
+		elseif message_id == 454 and param >= 300 then
+			windower.send_command(windower.to_shift_jis("input /p (゜￢゜)　吸食過量 "..param.."!!!"))
 		elseif message_id == 114 then
 			-- log('missed')
 			windower.send_command(windower.to_shift_jis("input /p (ﾉд-｡) 沒吸.... Miss...."))
