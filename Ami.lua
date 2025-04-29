@@ -73,6 +73,14 @@ function updateWidget2(state)
 		else
 			str = 'フラズル:✕✕✕'
 		end
+	elseif isJob('BRD') then
+		if state == nil then
+			str = '闇スレ:？'
+		elseif state then
+			str = '闇スレ:〇'
+		else
+			str = '闇スレ:✕✕✕'
+		end
 	end
 	widget2.msg = str
 end
@@ -118,6 +126,13 @@ windower.register_event('incoming chunk', function(id, data, modified, injected,
 				log('フラズル3 is off!!!!')
 				updateWidget2(false)
 			end
+		elseif isJob('BRD') then
+			local msg_id = data:unpack('H',0x19) % 0x8000
+			local effect = data:unpack('I',0x0D)
+			if msg_id == 206 and effect == 217 then
+				log('闇スレ2 is off!!!!')
+				updateWidget2(false)
+			end
 		end
 	end
 end)
@@ -149,6 +164,10 @@ function action_handler(act)
 		end
 	elseif isJob('RDM') and message_id == 237 and action_id == 883 then
 		log('フラズル3 is on')
+		updateWidget2(true)
+		
+	elseif isJob('BRD') and message_id == 237 and action_id == 878 then
+		log('闇スレ2 is on')
 		updateWidget2(true)
 	end
 end
