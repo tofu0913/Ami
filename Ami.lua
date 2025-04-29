@@ -8,6 +8,7 @@ require('mylibs/utils')
 config = require('config')
 require('actions')
 res = require('resources')
+packets = require('packets')
 
 local atp = false
 local aws = false
@@ -19,6 +20,12 @@ local default_settings = {
 		pos = {
 			x = 150,
 			y = 500
+		}
+	},
+	widget2 = {
+		pos = {
+			x = 150,
+			y = 200
 		}
 	},
 	ws = 'エクズデーション'
@@ -38,7 +45,8 @@ function setup_text(text)
     text:stroke_width(2)
 	text:show()
 end
-local widget = texts.new("${msg}", settings.widget, {})
+local widget = texts.new("${msg}", settings.widget, default_settings.widget)
+local widget2 = texts.new("${msg}", settings.widget2, default_settings.widget2)
 
 function updateWidget()
 	str = ''
@@ -53,6 +61,20 @@ function updateWidget()
 		str = str ..'不吸'
 	end
 	widget.msg = str
+end
+
+function updateWidget2(state)
+	str = ''
+	if isJob('RDM') then
+		if state == nil then
+			str = 'フラズル:？'
+		elseif state then
+			str = 'フラズル:〇'
+		else
+			str = 'フラズル:✕✕✕'
+		end
+	end
+	widget2.msg = str
 end
 
 function hasSilence()
@@ -87,6 +109,19 @@ windower.register_event('prerender', function(...)
     end
 end)
 
+windower.register_event('incoming chunk', function(id, data, modified, injected, blocked)
+	if id == 0x029 then
+		if isJob('RDM') then
+			local msg_id = data:unpack('H',0x19) % 0x8000
+			local effect = data:unpack('I',0x0D)
+			if msg_id == 206 and effect == 404 then
+				log('フラズル3 is off!!!!')
+				updateWidget2(false)
+			end
+		end
+	end
+end)
+
 function action_handler(act)
     local actionpacket = ActionPacket.new(act)
     local category = actionpacket:get_category_string()
@@ -112,6 +147,9 @@ function action_handler(act)
 			-- log('missed')
 			windower.send_command(windower.to_shift_jis("input /p (ﾉд-｡) 沒吸.... Miss...."))
 		end
+	elseif isJob('RDM') and message_id == 237 and action_id == 883 then
+		log('フラズル3 is on')
+		updateWidget2(true)
 	end
 end
 ActionPacket.open_listener(action_handler)
@@ -169,6 +207,8 @@ windower.register_event('load', function()
     windower.send_command('bind @t input //ami tp')
 	setup_text(widget)
 	updateWidget()
+	setup_text(widget2)
+	updateWidget2()
 end)
 
 windower.register_event('unload', function()
