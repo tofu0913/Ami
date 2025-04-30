@@ -154,10 +154,10 @@ function action_handler(act)
     local message_id = action:get_message_id()
     local param, resource, action_id, interruption, conclusion = action:get_spell()
 	if T{454,114}:contains(message_id) and action_id == 275 then
-		if message_id == 454 and param >= 200 then
-			windower.send_command(windower.to_shift_jis("input /p ('◇')ゞ 報告! 吸 "..param.."!!!"))
-		elseif message_id == 454 and param >= 300 then
+		if message_id == 454 and param >= 300 then
 			windower.send_command(windower.to_shift_jis("input /p (゜￢゜)　吸食過量 "..param.."!!!"))
+		elseif message_id == 454 and param >= 200 then
+			windower.send_command(windower.to_shift_jis("input /p ('◇')ゞ 報告! 吸 "..param.."!!!"))
 		elseif message_id == 114 then
 			-- log('missed')
 			windower.send_command(windower.to_shift_jis("input /p (ﾉд-｡) 沒吸.... Miss...."))
