@@ -1,6 +1,6 @@
 _addon.name = 'Ami'
 _addon.author = 'Cliff'
-_addon.version = '1.2.1'
+_addon.version = '1.4.0'
 _addon.commands = {'ami'}
 
 require('logger')
@@ -9,6 +9,7 @@ config = require('config')
 require('actions')
 res = require('resources')
 packets = require('packets')
+stats = require('stats')
 
 local atp = false
 local aws = false
@@ -28,6 +29,15 @@ local default_settings = {
 			y = 200
 		}
 	},
+	widget3 = {
+		pos = {
+			x = 524,
+			y = 494
+		},
+		text = {
+			size = 12,
+		},
+	},
 	ws = 'エクズデーション'
 }
 settings = config.load('data\\settings.xml',default_settings)
@@ -45,8 +55,20 @@ function setup_text(text)
     text:stroke_width(2)
 	text:show()
 end
+function setup_text3(text)
+    text:bg_alpha(255)
+    text:bg_visible(true)
+    text:font('ＭＳ ゴシック')
+    text:size(12)
+    text:color(255,255,255,255)
+    text:stroke_alpha(200)
+    text:stroke_color(20,20,20)
+    text:stroke_width(2)
+	text:show()
+end
 local widget = texts.new("${msg}", settings.widget, default_settings.widget)
 local widget2 = texts.new("${msg}", settings.widget2, default_settings.widget2)
+stats.widget = texts.new("${msg}", settings.widget3, default_settings.widget3)
 
 function updateWidget()
 	str = ''
@@ -228,15 +250,16 @@ end)
 
 windower.register_event('load', function()
     log('===========loaded===========')
-    windower.send_command('bind @w input //ami ws')
+    -- windower.send_command('bind @w input //ami ws')
     windower.send_command('bind @t input //ami tp')
 	setup_text(widget)
 	updateWidget()
 	setup_text(widget2)
 	updateWidget2()
+	setup_text3(stats.widget)
 end)
 
 windower.register_event('unload', function()
-    windower.send_command('unbind @w')
+    -- windower.send_command('unbind @w')
     windower.send_command('unbind @t')
 end)
