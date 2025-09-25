@@ -4,9 +4,9 @@ local timer = os.clock()
 stats = {}
 stats.widget = nil
 
-local PLD = 'Felicya'
-local DNC = ''
-local BRD = 'Felicya'
+local PLD = 'Frieren'
+local DNC = 'Felicya'
+local BRD = 'Mikahu'
 local GEO = 'Zeusroars'
 local COR = 'Dorithy'
 local RDM = 'Lynnix'
