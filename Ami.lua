@@ -107,7 +107,7 @@ windower.register_event('prerender', function(...)
 				windower.send_command(windower.to_shift_jis('input /ma アブゾタック <bt>'))
 				lastCheck = os.clock() + 3
 				return
-			elseif aws and windower.ffxi.get_player().vitals.tp >= 1000 and target.distance < 15 then
+			elseif aws and windower.ffxi.get_player().vitals.tp >= 1000 and target.distance < 15  and windower.ffxi.get_spell_recasts()[275] <= 7 then
 				windower.send_command(windower.to_shift_jis('input /ws '..settings.ws..' <bt>'))
 				lastCheck = os.clock() + 4
 				return
