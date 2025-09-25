@@ -256,8 +256,10 @@ windower.register_event('load', function()
 		setup_text(widget)
 		updateWidget()
 	end
+	if isJob('BRD') or isJob('RDM') then
 		setup_text(widget2)
 		updateWidget2()
+	end
 	setup_text3(stats.widget)
 end)
 
