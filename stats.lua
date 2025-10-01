@@ -114,25 +114,28 @@ ActionPacket.open_listener(function(act)
 			end
 		end
 	elseif T{'mob_tp_finish','melee'}:contains(category) and isMob(actor) then
-		local target = actionpacket:get_targets()()
-		local action = target:get_actions()()
-		if isInParty(target.id) then
-			local message_id = action:get_message_id()
-			local param, resource, action_id, interruption, conclusion = action:get_spell()
-			if (message_id == 1 and param == 0) or message_id == 373 then
-				if not zerodamage.total then
-					zerodamage.total = 0
+		for target in actionpacket:get_targets() do
+			for action in target:get_actions() do
+				local player = windower.ffxi.get_mob_by_id(target.id).name
+				if player == PLD then
+					local message_id = action:get_message_id()
+					local param, resource, action_id, interruption, conclusion = action:get_spell()
+					if (message_id == 1 and param == 0) or message_id == 373 then
+						if not zerodamage.total then
+							zerodamage.total = 0
+						end
+						if not zerodamage.success then
+							zerodamage.success = 0
+						end
+						zerodamage.success = zerodamage.success + 1
+						zerodamage.total = zerodamage.total + 1
+					elseif message_id == 1 and param > 0 then
+						if not zerodamage.total then
+							zerodamage.total = 0
+						end
+						zerodamage.total = zerodamage.total + 1
+					end
 				end
-				if not zerodamage.success then
-					zerodamage.success = 0
-				end
-				zerodamage.success = zerodamage.success + 1
-				zerodamage.total = zerodamage.total + 1
-			elseif message_id == 1 and param > 0 then
-				if not zerodamage.total then
-					zerodamage.total = 0
-				end
-				zerodamage.total = zerodamage.total + 1
 			end
 		end
 	end
