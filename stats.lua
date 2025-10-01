@@ -78,7 +78,8 @@ ActionPacket.open_listener(function(act)
 		local target = actionpacket:get_targets()()
 		local action = target:get_actions()()
 		local mob = windower.ffxi.get_mob_by_id(target.id or 0)
-		if mob then--and mob.name == TARGET then
+		-- if mob then
+		if mob and mob.name == TARGET then
 			local message_id = action:get_message_id()
 			local param, resource, action_id, interruption, conclusion = action:get_spell()
 			local player = windower.ffxi.get_mob_by_id(actor).name
