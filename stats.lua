@@ -59,7 +59,7 @@ local function update_wifget()
 end
 
 windower.register_event('prerender', function(...)
-    if (os.clock() - timer) > 1 and stats.widget then
+    if (os.clock() - timer) > 2 and stats.widget then
 		update_wifget()
 		timer = os.clock()
 	end
