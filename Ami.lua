@@ -122,6 +122,8 @@ function findTarget()
 end
 
 windower.register_event('prerender', function(...)
+	if not isJob('GEO') and not isJob('BRD') and not isJob('RDM') then return end
+	
     if (os.clock() - lastCheck) > 1 then
 		local target = findTarget()
 		if target then
@@ -140,6 +142,8 @@ windower.register_event('prerender', function(...)
 end)
 
 windower.register_event('incoming chunk', function(id, data, modified, injected, blocked)
+	if not isJob('BRD') and not isJob('RDM') then return end
+	
 	if id == 0x029 then
 		if isJob('RDM') then
 			local msg_id = data:unpack('H',0x19) % 0x8000
@@ -160,6 +164,8 @@ windower.register_event('incoming chunk', function(id, data, modified, injected,
 end)
 
 function action_handler(act)
+	if not isJob('GEO') and not isJob('BRD') and not isJob('RDM') then return end
+	
     local actionpacket = ActionPacket.new(act)
     local category = actionpacket:get_category_string()
 	
