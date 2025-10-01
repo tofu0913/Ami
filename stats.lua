@@ -101,7 +101,7 @@ ActionPacket.open_listener(function(act)
 					end
 					absotp[player].success = absotp[player].success + 1
 					absotp[player].total = absotp[player].total + 1
-					log(absotp[player].total)
+					-- log(absotp[player].total)
 				elseif message_id == 114 then
 					if not absotp[player] then
 						absotp[player] = {}
