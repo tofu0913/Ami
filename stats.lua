@@ -4,12 +4,6 @@ local timer = os.clock()
 stats = {}
 stats.widget = nil
 
-local PLD = 'Frieren'
-local DNC = 'Felicya'
-local BRD = 'Mikahu'
-local GEO = 'Zeusroars'
-local COR = 'Dorithy'
-local RDM = 'Lynnix'
 local TARGET = 'Aminon'
 local wsdamage = {}
 local wsd_total = 0
@@ -36,24 +30,24 @@ end
 
 local function update_wifget()
 	local msg = '%25s\n':format('ZeroRate')
-	if PLD ~= '' then
-		msg = msg ..'PLD %-12s %6s\n\n':format('('..PLD..')', calc_rate(zerodamage))
+	if settings.PLD ~= '' then
+		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
 	end
 	msg = msg .. '%25s%10s\n':format('WsDamage','AbsoTp')
 	if DNC ~= '' then
-		msg = msg ..'DNC %-12s %6s\n':format('('..DNC..')', wsd_rate(wsdamage[DNC]))
+		msg = msg ..'DNC %-12s %6s\n':format('('..settings.DNC..')', wsd_rate(wsdamage[settings.DNC]))
 	end
 	if COR ~= '' then
-		msg = msg ..'COR %-12s %6s, %16s\n':format('('..COR..')', wsd_rate(wsdamage[COR]), calc_rate(absotp[COR]))
+		msg = msg ..'COR %-12s %6s, %16s\n':format('('..settings.COR..')', wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
 	end
 	if RDM ~= '' then
-		msg = msg ..'RDM %-12s %6s, %16s\n':format('('..RDM..')', wsd_rate(wsdamage[RDM]), calc_rate(absotp[RDM]))
+		msg = msg ..'RDM %-12s %6s, %16s\n':format('('..settings.RDM..')', wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
 	end
 	if BRD ~= '' then
-		msg = msg ..'BRD %-12s %6s, %16s\n':format('('..BRD..')', wsd_rate(wsdamage[BRD]), calc_rate(absotp[BRD]))
+		msg = msg ..'BRD %-12s %6s, %16s\n':format('('..settings.BRD..')', wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
 	end
 	if GEO ~= '' then
-		msg = msg ..'GEO %-12s %6s, %16s\n':format('('..GEO..')', wsd_rate(wsdamage[GEO]), calc_rate(absotp[GEO]))
+		msg = msg ..'GEO %-12s %6s, %16s\n':format('('..settings.GEO..')', wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
 	
 	stats.widget.msg = msg
@@ -119,7 +113,7 @@ ActionPacket.open_listener(function(act)
 		for target in actionpacket:get_targets() do
 			for action in target:get_actions() do
 				local player = windower.ffxi.get_mob_by_id(target.id).name
-				if player == PLD then
+				if player == settings.PLD then
 					local message_id = action:get_message_id()
 					local param, resource, action_id, interruption, conclusion = action:get_spell()
 					if (message_id == 1 and param == 0) or message_id == 373 then

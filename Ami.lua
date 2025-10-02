@@ -38,7 +38,14 @@ local default_settings = {
 			size = 12,
 		},
 	},
-	ws = 'エクズデーション'
+	ws = 'エクズデーション',
+	
+	PLD = 'Doshu',
+	DNC = 'Felicya',
+	BRD = 'Mikahu',
+	GEO = 'Zeusroars',
+	COR = 'Dorithy',
+	RDM = 'Foka',
 }
 settings = config.load('data\\settings.xml',default_settings)
 
