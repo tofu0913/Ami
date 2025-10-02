@@ -12,12 +12,13 @@ local COR = 'Dorithy'
 local RDM = 'Lynnix'
 local TARGET = 'Aminon'
 local wsdamage = {}
+local wsd_total = 0
 local absotp = {}
 local zerodamage = {}
 
 local function wsd_rate(num)
-	if num ~= nil then
-		return '%2.2f%%':format(num/5000000*100)
+	if num ~= nil and wsd_total>0 then
+		return '%2.2f%%':format(num/wsd_total*100)
 	end
 	return '%2.2f%%':format(0)
 end
@@ -87,6 +88,7 @@ ActionPacket.open_listener(function(act)
 				if not wsdamage[player] then
 					wsdamage[player] = 0
 				end
+				wsd_total = wsd_total + param
 				wsdamage[player] = param + wsdamage[player]
 			elseif T{454,114}:contains(message_id) and action_id == 275 then
 				if message_id == 454 and param > 0 then
