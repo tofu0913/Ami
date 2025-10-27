@@ -6,9 +6,17 @@ stats.widget = nil
 
 local TARGET = 'Aminon'
 local wsdamage = {}
+local wscount = {}
 local wsd_total = 0
 local absotp = {}
 local zerodamage = {}
+
+local function show_count(num)
+	if num ~= nil then
+		return '%2d':format(num)
+	end
+	return '%2d':format(0)
+end
 
 local function wsd_rate(num)
 	if num ~= nil and wsd_total>0 then
@@ -33,21 +41,21 @@ local function update_wifget()
 	if settings.PLD ~= '' then
 		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
 	end
-	msg = msg .. '%25s%10s\n':format('WsDamage','AbsoTp')
+	msg = msg .. '%20s %8s% 12s\n':format('Ws','Damage','AbsoTp')
 	if DNC ~= '' then
-		msg = msg ..'DNC %-12s %6s\n':format('('..settings.DNC..')', wsd_rate(wsdamage[settings.DNC]))
+		msg = msg ..'DNC %-12s %2s %10s\n':format('('..settings.DNC..')', show_count(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
 	end
 	if COR ~= '' then
-		msg = msg ..'COR %-12s %6s, %16s\n':format('('..settings.COR..')', wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
+		msg = msg ..'COR %-12s %2s %10s, %13s\n':format('('..settings.COR..')', show_count(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
 	end
 	if RDM ~= '' then
-		msg = msg ..'RDM %-12s %6s, %16s\n':format('('..settings.RDM..')', wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
+		msg = msg ..'RDM %-12s %2s %10s, %13s\n':format('('..settings.RDM..')', show_count(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
 	end
 	if BRD ~= '' then
-		msg = msg ..'BRD %-12s %6s, %16s\n':format('('..settings.BRD..')', wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
+		msg = msg ..'BRD %-12s %2s %10s, %13s\n':format('('..settings.BRD..')', show_count(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
 	end
 	if GEO ~= '' then
-		msg = msg ..'GEO %-12s %6s, %16s\n':format('('..settings.GEO..')', wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
+		msg = msg ..'GEO %-12s %2s %10s, %13s\n':format('('..settings.GEO..')', show_count(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
 	
 	stats.widget.msg = msg
@@ -84,6 +92,10 @@ ActionPacket.open_listener(function(act)
 				end
 				wsd_total = wsd_total + param
 				wsdamage[player] = param + wsdamage[player]
+				if not wscount[player] then
+					wscount[player] = 0
+				end
+				wscount[player] = wscount[player] + 1
 			elseif T{454,114}:contains(message_id) and action_id == 275 then
 				if message_id == 454 and param > 0 then
 					if not absotp[player] then
