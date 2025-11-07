@@ -8,6 +8,8 @@ local TARGET = 'Aminon'
 local wsdamage = {}
 local wscount = {}
 local wsd_total = 0
+local absotptime = nil
+local absotpsum = 0
 local absotp = {}
 local zerodamage = {}
 
@@ -36,6 +38,17 @@ local function calc_rate(data)
 	return '0/0 %2.2f%%':format(0)
 end
 
+function calc_absoavg()
+	local rate = 0
+	if absotptime then
+		local totaltime = os.clock() - absotptime
+		if totaltime > 0 then
+			rate = absotpsum / totaltime
+		end
+	end
+	return '%2.2f tp/s':format(rate)
+end
+
 local function update_wifget()
 	local msg = '%25s\n':format('ZeroRate')
 	if settings.PLD ~= '' then
@@ -57,6 +70,7 @@ local function update_wifget()
 	if GEO ~= '' then
 		msg = msg ..'GEO %-12s %2s %10s, %13s\n':format('('..settings.GEO..')', show_count(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
+	msg = msg .. '\n%45s':format(calc_absoavg())
 	
 	stats.widget.msg = msg
 end
@@ -98,6 +112,9 @@ ActionPacket.open_listener(function(act)
 				wscount[player] = wscount[player] + 1
 			elseif T{454,114}:contains(message_id) and action_id == 275 then
 				if message_id == 454 and param > 0 then
+					if not absotptime then
+						absotptime = os.clock()
+					end
 					if not absotp[player] then
 						absotp[player] = {}
 					end
@@ -110,7 +127,11 @@ ActionPacket.open_listener(function(act)
 					absotp[player].success = absotp[player].success + 1
 					absotp[player].total = absotp[player].total + 1
 					-- log(absotp[player].total)
+					absotpsum = absotpsum + param
 				elseif message_id == 114 then
+					if not absotptime then
+						absotptime = os.clock()
+					end
 					if not absotp[player] then
 						absotp[player] = {}
 					end
