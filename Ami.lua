@@ -258,6 +258,9 @@ windower.register_event('addon command', function(command, ...)
 	elseif command == 'save' then
 		settings:save()
 		log('Settings saved.')
+		
+	elseif T{'r','re','report'}:contains(command) then
+		stats.report()
 	end
 end)
 

@@ -49,6 +49,19 @@ function calc_absoavg()
 	return '%2.2f tp/s':format(rate)
 end
 
+function total_rate(data)
+	local total = 0
+	local success = 0
+	for k,v in pairs(data) do
+		total = total + v.total
+		success = success + v.success
+	end
+	if total > 0 then
+		return '%2.2f%%':format(success/total*100)
+	end
+	return '0.00%'
+end
+
 local function update_wifget()
 	local msg = '%25s\n':format('ZeroRate')
 	if settings.PLD ~= '' then
@@ -73,6 +86,13 @@ local function update_wifget()
 	msg = msg .. '\n%45s':format(calc_absoavg())
 	
 	stats.widget.msg = msg
+end
+
+function stats.report()
+	windower.send_command(windower.to_shift_jis('input /p ===== Aminon Rport =====; wait 1.5;'..
+												'input /p Zero damage rate: %s; wait 1.5;':format(calc_rate(zerodamage))..
+												'input /p Abso Tp avg.:      %s (%s); wait 1.5;':format(calc_absoavg(),total_rate(absotp)))
+	)
 end
 
 windower.register_event('prerender', function(...)
