@@ -67,21 +67,21 @@ local function update_wifget()
 	if settings.PLD ~= '' then
 		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
 	end
-	msg = msg .. '%16s %14s% 9s\n':format('Ws','Damage','AbsoTp')
+	msg = msg .. '%18s %14s% 9s\n':format('Ws','Damage','AbsoTp')
 	if DNC ~= '' then
-		msg = msg ..'DNC %-7s %10s %6s\n':format('('..settings.DNC..')', calc_rate(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
+		msg = msg ..'DNC %-11s %-10s %6s\n':format(settings.DNC, calc_rate(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
 	end
 	if COR ~= '' then
-		msg = msg ..'COR %-8s %10s %6s, %9s\n':format('('..settings.COR..')', calc_rate(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
+		msg = msg ..'COR %-11s %-10s %6s, %9s\n':format(settings.COR, calc_rate(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
 	end
 	if RDM ~= '' then
-		msg = msg ..'RDM %-8s %10s %6s, %9s\n':format('('..settings.RDM..')', calc_rate(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
+		msg = msg ..'RDM %-11s %-10s %6s, %9s\n':format(settings.RDM, calc_rate(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
 	end
 	if BRD ~= '' then
-		msg = msg ..'BRD %-8s %10s %6s, %9s\n':format('('..settings.BRD..')', calc_rate(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
+		msg = msg ..'BRD %-11s %-10s %6s, %9s\n':format(settings.BRD, calc_rate(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
 	end
 	if GEO ~= '' then
-		msg = msg ..'GEO %-8s %10s %6s, %9s\n':format('('..settings.GEO..')', calc_rate(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
+		msg = msg ..'GEO %-11s %-10s %6s, %9s\n':format(settings.GEO, calc_rate(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
 	msg = msg .. '\n%45s':format(calc_absoavg())
 	
