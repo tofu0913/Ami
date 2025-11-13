@@ -30,12 +30,12 @@ end
 local function calc_rate(data)
 	if data then
 		if data.total == nil then
-			return '0/0 %2.2f%%':format(0)
+			return '0/0 %2.0f%%':format(0)
 		elseif data.total ~= nil and data.success ~= nil then
-			return '%s/%s (%2.2f%%)':format(data.success, data.total, data.success/data.total*100)
+			return '%s/%s (%2.0f%%)':format(data.success, data.total, data.success/data.total*100)
 		end
 	end
-	return '0/0 %2.2f%%':format(0)
+	return '0/0 %2.0f%%':format(0)
 end
 
 function calc_absoavg()
@@ -67,21 +67,21 @@ local function update_wifget()
 	if settings.PLD ~= '' then
 		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
 	end
-	msg = msg .. '%20s %8s% 12s\n':format('Ws','Damage','AbsoTp')
+	msg = msg .. '%16s %14s% 9s\n':format('Ws','Damage','AbsoTp')
 	if DNC ~= '' then
-		msg = msg ..'DNC %-12s %2s %10s\n':format('('..settings.DNC..')', show_count(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
+		msg = msg ..'DNC %-7s %10s %6s\n':format('('..settings.DNC..')', calc_rate(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
 	end
 	if COR ~= '' then
-		msg = msg ..'COR %-12s %2s %10s, %13s\n':format('('..settings.COR..')', show_count(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
+		msg = msg ..'COR %-8s %10s %6s, %9s\n':format('('..settings.COR..')', calc_rate(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
 	end
 	if RDM ~= '' then
-		msg = msg ..'RDM %-12s %2s %10s, %13s\n':format('('..settings.RDM..')', show_count(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
+		msg = msg ..'RDM %-8s %10s %6s, %9s\n':format('('..settings.RDM..')', calc_rate(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
 	end
 	if BRD ~= '' then
-		msg = msg ..'BRD %-12s %2s %10s, %13s\n':format('('..settings.BRD..')', show_count(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
+		msg = msg ..'BRD %-8s %10s %6s, %9s\n':format('('..settings.BRD..')', calc_rate(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
 	end
 	if GEO ~= '' then
-		msg = msg ..'GEO %-12s %2s %10s, %13s\n':format('('..settings.GEO..')', show_count(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
+		msg = msg ..'GEO %-8s %10s %6s, %9s\n':format('('..settings.GEO..')', calc_rate(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
 	msg = msg .. '\n%45s':format(calc_absoavg())
 	
@@ -106,12 +106,12 @@ ActionPacket.open_listener(function(act)
     local actionpacket = ActionPacket.new(act)
     local category = actionpacket:get_category_string()
 	-- log(category)
-    if not (T{'weaponskill_finish','spell_finish','mob_tp_finish','melee'}:contains(category)) or act.param == 0 then
+    if not (T{'weaponskill_begin','weaponskill_finish','spell_finish','mob_tp_finish','melee'}:contains(category)) or act.param == 0 then
         return
     end
 
     local actor = actionpacket:get_id()
-	if T{'weaponskill_finish','spell_finish'}:contains(category) and isInParty(actor) then
+	if T{'weaponskill_begin','weaponskill_finish','spell_finish'}:contains(category) and isInParty(actor) then
 		local target = actionpacket:get_targets()()
 		local action = target:get_actions()()
 		local mob = windower.ffxi.get_mob_by_id(target.id or 0)
@@ -120,16 +120,27 @@ ActionPacket.open_listener(function(act)
 			local message_id = action:get_message_id()
 			local param, resource, action_id, interruption, conclusion = action:get_spell()
 			local player = windower.ffxi.get_mob_by_id(actor).name
-			if T{185}:contains(message_id) then
+			if T{43}:contains(message_id) then
+				if not wscount[player] then
+					wscount[player] = {}
+				end
+				if not wscount[player].total then
+					wscount[player].total = 0
+				end
+				wscount[player].total = wscount[player].total + 1
+			elseif T{185}:contains(message_id) then
 				if not wsdamage[player] then
 					wsdamage[player] = 0
 				end
 				wsd_total = wsd_total + param
 				wsdamage[player] = param + wsdamage[player]
 				if not wscount[player] then
-					wscount[player] = 0
+					wscount[player] = {}
 				end
-				wscount[player] = wscount[player] + 1
+				if not wscount[player].success then
+					wscount[player].success = 0
+				end
+				wscount[player].success = wscount[player].success + 1
 			elseif T{454,114}:contains(message_id) and action_id == 275 then
 				if message_id == 454 and param > 0 then
 					if not absotptime then
