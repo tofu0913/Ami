@@ -54,7 +54,7 @@ function total_rate(data)
 	local success = 0
 	for k,v in pairs(data) do
 		total = total + v.total
-		success = success + v.success
+		success = success + (v.success and v.success or 0)
 	end
 	if total > 0 then
 		return '%2.2f%%':format(success/total*100)
@@ -91,7 +91,8 @@ end
 function stats.report()
 	windower.send_command(windower.to_shift_jis('input /p ===== Aminon Rport =====; wait 1.5;'..
 												'input /p Zero damage rate: %s; wait 1.5;':format(calc_rate(zerodamage))..
-												'input /p Abso Tp avg.:      %s (%s); wait 1.5;':format(calc_absoavg(),total_rate(absotp)))
+												'input /p Abso Tp avg.:      %s (%s); wait 1.5;':format(calc_absoavg(),total_rate(absotp))..
+												'input /p Ws acc avg.:       %s; wait 1.5;':format(total_rate(wscount)))
 	)
 end
 

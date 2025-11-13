@@ -35,7 +35,7 @@ local default_settings = {
 			y = 494
 		},
 		text = {
-			size = 12,
+			size = 11,
 		},
 	},
 	ws = 'エクズデーション',
