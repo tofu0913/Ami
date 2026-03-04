@@ -1,4 +1,5 @@
 
+require('mylibs/jobs')
 local timer = os.clock()
 
 stats = {}
@@ -62,7 +63,7 @@ function total_rate(data)
 	return '0.00%'
 end
 
-local function update_wifget()
+local function update_widget()
 	local msg = '%25s\n':format('ZeroRate')
 	if settings.PLD ~= '' then
 		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
@@ -96,9 +97,24 @@ function stats.report()
 	)
 end
 
+function update_memberjobs()
+	settings.PLD = find_one_job('PLD')
+	settings.DNC = 'Felicya'
+	settings.BRD = find_one_job('BRD')
+	settings.GEO = find_one_job('GEO')
+	settings.COR = find_one_job('COR')
+	settings.RDM = find_one_job('RDM')
+	if settings.PLD and settings.DNC and settings.BRD and settings.GEO and settings.COR and settings.RDM then
+		return true
+	end
+	return false
+end
+
 windower.register_event('prerender', function(...)
     if (os.clock() - timer) > 2 and stats.widget then
-		update_wifget()
+		if update_memberjobs() then
+			update_widget()
+		end
 		timer = os.clock()
 	end
 end)
