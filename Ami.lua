@@ -267,7 +267,7 @@ end)
 windower.register_event('load', function()
     log('===========loaded===========')
 	if isJob('GEO') or isJob('BRD') or isJob('RDM') then
-		windower.send_command('bind @w input //ami ws')
+		windower.send_command('bind @e input //ami ws')
 		windower.send_command('bind @t input //ami tp')
 		setup_text(widget)
 		updateWidget()
@@ -281,7 +281,7 @@ end)
 
 windower.register_event('unload', function()
 	if isJob('GEO') or isJob('BRD') or isJob('RDM') then
-		windower.send_command('unbind @w')
+		windower.send_command('unbind @e')
 		windower.send_command('unbind @t')
 	end
 end)
