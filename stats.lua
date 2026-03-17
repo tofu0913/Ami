@@ -80,19 +80,19 @@ local function update_widget()
 		msg = msg ..'PLD %-11s %-10s %6s, %9s\n':format(settings.PLD, calc_rate(wscount[settings.PLD]), wsd_rate(wsdamage[settings.PLD]), calc_rate(zerodamage))
 	end
 	msg = msg .. '%43s\n':format('AbsoTp')
-	if DNC ~= '' then
+	if settings.DNC ~= '' then
 		msg = msg ..'DNC %-11s %-10s %6s\n':format(settings.DNC, calc_rate(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
 	end
-	if COR ~= '' then
+	if settings.COR ~= '' then
 		msg = msg ..'COR %-11s %-10s %6s, %9s\n':format(settings.COR, calc_rate(wscount[settings.COR]), wsd_rate(wsdamage[settings.COR]), calc_rate(absotp[settings.COR]))
 	end
-	if RDM ~= '' then
+	if settings.RDM ~= '' then
 		msg = msg ..'RDM %-11s %-10s %6s, %9s\n':format(settings.RDM, calc_rate(wscount[settings.RDM]), wsd_rate(wsdamage[settings.RDM]), calc_rate(absotp[settings.RDM]))
 	end
-	if BRD ~= '' then
+	if settings.BRD ~= '' then
 		msg = msg ..'BRD %-11s %-10s %6s, %9s\n':format(settings.BRD, calc_rate(wscount[settings.BRD]), wsd_rate(wsdamage[settings.BRD]), calc_rate(absotp[settings.BRD]))
 	end
-	if GEO ~= '' then
+	if settings.GEO ~= '' then
 		msg = msg ..'GEO %-11s %-10s %6s, %9s\n':format(settings.GEO, calc_rate(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
 	msg = msg .. '\n%s%39s':format(get_battle_time(), calc_absoavg())
