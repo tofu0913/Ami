@@ -13,6 +13,7 @@ local absotptime = nil
 local absotpsum = 0
 local absotp = {}
 local zerodamage = {}
+local first_ws_time = nil
 
 local function show_count(num)
 	if num ~= nil then
@@ -63,6 +64,15 @@ function total_rate(data)
 	return '0.00%'
 end
 
+function get_battle_time()
+	if first_ws_time == nil then
+		return '00:00'
+	else
+		local totalSeconds = os.clock() - first_ws_time
+		return string.format("%02d:%02d", math.floor(totalSeconds / 60), (totalSeconds % 60)) 
+	end
+end
+
 local function update_widget()
 	local msg = '%25s\n':format('ZeroRate')
 	if settings.PLD ~= '' then
@@ -84,7 +94,7 @@ local function update_widget()
 	if GEO ~= '' then
 		msg = msg ..'GEO %-11s %-10s %6s, %9s\n':format(settings.GEO, calc_rate(wscount[settings.GEO]), wsd_rate(wsdamage[settings.GEO]), calc_rate(absotp[settings.GEO]))
 	end
-	msg = msg .. '\n%45s':format(calc_absoavg())
+	msg = msg .. '\n%s%39s':format(get_battle_time(), calc_absoavg())
 	
 	stats.widget.msg = msg
 end
@@ -158,6 +168,9 @@ ActionPacket.open_listener(function(act)
 					wscount[player].success = 0
 				end
 				wscount[player].success = wscount[player].success + 1
+				if first_ws_time == nil then
+					first_ws_time = os.clock()
+				end
 			elseif T{454,114}:contains(message_id) and action_id == 275 then
 				if message_id == 454 and param > 0 then
 					if not absotptime then
