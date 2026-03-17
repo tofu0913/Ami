@@ -74,11 +74,12 @@ function get_battle_time()
 end
 
 local function update_widget()
-	local msg = '%25s\n':format('ZeroRate')
+	local msg = '%18s %14s %11s\n':format('Ws','Damage','ZeroRate')
 	if settings.PLD ~= '' then
-		msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
+		-- msg = msg ..'PLD %-12s %6s\n\n':format('('..settings.PLD..')', calc_rate(zerodamage))
+		msg = msg ..'PLD %-11s %-10s %6s, %9s\n':format(settings.PLD, calc_rate(wscount[settings.PLD]), wsd_rate(wsdamage[settings.PLD]), calc_rate(zerodamage))
 	end
-	msg = msg .. '%18s %14s% 9s\n':format('Ws','Damage','AbsoTp')
+	msg = msg .. '%43s\n':format('AbsoTp')
 	if DNC ~= '' then
 		msg = msg ..'DNC %-11s %-10s %6s\n':format(settings.DNC, calc_rate(wscount[settings.DNC]), wsd_rate(wsdamage[settings.DNC]))
 	end
